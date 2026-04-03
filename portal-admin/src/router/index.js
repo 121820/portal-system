@@ -3,6 +3,7 @@ import ArticleList from '../views/ArticleList.vue'
 import ArticleDetail from '../views/ArticleDetail.vue'
 import CategoryList from '../views/CategoryList.vue'
 import TagList from '../views/TagList.vue'
+import UserList from '../views/UserList.vue'
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
     path: '/tags',
     name: 'TagList',
     component: TagList
+  },
+  {
+    path: '/users',
+    name: 'UserList',
+    component: UserList
   }
 ]
 
