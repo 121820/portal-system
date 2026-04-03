@@ -34,7 +34,7 @@
     </el-card>
     
     <!-- 编辑对话框 -->
-    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="80%">
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="80%" destroy-on-close>
       <el-form :model="form" label-width="80px">
         <el-form-item label="标题">
           <el-input v-model="form.title" />
@@ -65,13 +65,14 @@
             action="/api/v1/files/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :headers="{ 'X-Requested-With': 'XMLHttpRequest' }"
           >
             <img v-if="form.coverImage" :src="form.coverImage" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
         <el-form-item label="内容">
-          <el-textarea v-model="form.content" :rows="15" />
+          <WangEditor v-model="form.content" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -87,10 +88,12 @@
 <script>
 import { Plus } from '@element-plus/icons-vue'
 import axios from 'axios'
+import WangEditor from '../components/WangEditor.vue'
 
 export default {
   components: {
-    Plus
+    Plus,
+    WangEditor
   },
   data() {
     return {
@@ -110,11 +113,6 @@ export default {
         coverImage: '',
         content: ''
       }
-    }
-  },
-  computed: {
-    statusText() {
-      return this.status === 1 ? '已发布' : '草稿'
     }
   },
   async mounted() {
@@ -140,6 +138,7 @@ export default {
         this.total = response.data.total
       } catch (error) {
         console.error('加载文章失败:', error)
+        this.$message.error('加载文章失败')
       }
     },
     async loadCategories() {
@@ -148,6 +147,7 @@ export default {
         this.categories = response.data.data
       } catch (error) {
         console.error('加载栏目失败:', error)
+        this.$message.error('加载栏目失败')
       }
     },
     async loadTags() {
@@ -156,6 +156,7 @@ export default {
         this.tags = response.data.data
       } catch (error) {
         console.error('加载标签失败:', error)
+        this.$message.error('加载标签失败')
       }
     },
     handleCreate() {
@@ -176,17 +177,45 @@ export default {
       this.dialogVisible = true
     },
     handleDelete(row) {
-      // TODO: 实现删除逻辑
-      console.log('删除文章:', row.id)
+      this.$confirm('确定要删除这篇文章吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        try {
+          await axios.delete(`/api/v1/articles/${row.id}`)
+          this.$message.success('删除成功')
+          this.loadArticles()
+        } catch (error) {
+          console.error('删除文章失败:', error)
+          this.$message.error('删除文章失败')
+        }
+      }).catch(() => {})
     },
     handleAvatarSuccess(response, uploadFile) {
-      this.form.coverImage = response.url
+      if (response.success) {
+        this.form.coverImage = response.data.url
+      } else {
+        this.$message.error('封面图片上传失败')
+      }
     },
-    handleSave() {
-      // TODO: 实现保存逻辑
-      console.log('保存文章:', this.form)
-      this.dialogVisible = false
-      this.loadArticles()
+    async handleSave() {
+      try {
+        if (this.form.id) {
+          // 更新文章
+          await axios.put(`/api/v1/articles/${this.form.id}`, this.form)
+          this.$message.success('文章更新成功')
+        } else {
+          // 创建文章
+          await axios.post('/api/v1/articles', this.form)
+          this.$message.success('文章创建成功')
+        }
+        this.dialogVisible = false
+        this.loadArticles()
+      } catch (error) {
+        console.error('保存文章失败:', error)
+        this.$message.error('保存文章失败')
+      }
     },
     handleSizeChange(val) {
       this.pageSize = val
