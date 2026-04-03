@@ -84,7 +84,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -213,7 +214,9 @@ export default {
     }
     
     // 初始化加载
-    loadCategories()
+    onMounted(() => {
+      loadCategories()
+    })
     
     return {
       categories,
@@ -231,3 +234,18 @@ export default {
     }
   }
 }
+</script>
+
+<style scoped>
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
+.tree-node-actions .el-button {
+  margin-left: 8px;
+}
+</style>

@@ -37,6 +37,7 @@
 
 <script>
 import { useRouter, useRoute } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -77,7 +78,7 @@ export default {
         }
       } catch (error) {
         console.error('加载文章详情失败:', error)
-        this.$message.error('加载文章详情失败')
+        ElMessage.error('加载文章详情失败')
         this.handleBack()
       }
     },
@@ -90,18 +91,18 @@ export default {
       router.push(`/articles/edit/${this.article.id}`)
     },
     handleDelete() {
-      this.$confirm('确定要删除这篇文章吗？', '提示', {
+      ElMessageBox.confirm('确定要删除这篇文章吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
         try {
           await axios.delete(`/api/v1/articles/${this.article.id}`)
-          this.$message.success('删除成功')
+          ElMessage.success('删除成功')
           this.handleBack()
         } catch (error) {
           console.error('删除文章失败:', error)
-          this.$message.error('删除文章失败')
+          ElMessage.error('删除文章失败')
         }
       }).catch(() => {})
     },
@@ -115,3 +116,26 @@ export default {
     }
   }
 }
+</script>
+
+<style scoped>
+.article-meta {
+  margin-bottom: 20px;
+}
+.meta-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+.meta-info span {
+  margin-right: 20px;
+}
+.article-content {
+  line-height: 1.6;
+  font-size: 16px;
+}
+.preview-content {
+  line-height: 1.6;
+  font-size: 16px;
+}
+</style>

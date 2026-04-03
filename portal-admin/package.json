@@ -1,25 +1,49 @@
 {
   "name": "portal-admin",
   "version": "1.0.0",
-  "description": "门户网站管理后台",
+  "description": "Portal System Admin Panel",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
-  "keywords": [],
-  "author": "Liu Yixuan",
-  "license": "MIT",
-  "type": "module",
   "dependencies": {
-    "vue": "^3.4.27",
-    "element-plus": "^2.7.5",
     "@element-plus/icons-vue": "^2.3.1",
-    "vue-router": "^4.3.3",
-    "axios": "^1.6.8"
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "axios": "^1.6.8",
+    "core-js": "^3.37.0",
+    "element-plus": "^2.7.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "vite": "^5.2.0"
-  }
+    "@babel/eslint-parser": "^7.28.6",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
 }

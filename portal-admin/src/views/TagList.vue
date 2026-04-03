@@ -58,6 +58,7 @@
 
 <script>
 import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -193,3 +194,8 @@ export default {
     }
   }
 }
+</script>
+
+<style scoped>
+/* 可以添加样式 */
+</style>

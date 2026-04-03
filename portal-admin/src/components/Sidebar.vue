@@ -56,3 +56,11 @@ export default {
     }
   }
 }
+</script>
+
+<style scoped>
+.sidebar-menu {
+  height: 100%;
+  border-right: none;
+}
+</style>
